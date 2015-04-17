@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration scan="true" scanPeriod="10 seconds">
+
+	<property name="LOG_HOME" value="/data/log/wp-web" />
+	<appender name="console" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%date{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+	<appender name="adminStdoutFile" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<file>${LOG_HOME}/main.log</file>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<fileNamePattern>${LOG_HOME}/admin.log.%d{yyyy-MM-dd}</fileNamePattern>
+			<maxHistory>10</maxHistory>
+		</rollingPolicy>
+		<encoder charset="UTF-8">
+			<pattern>%d{yy-MM-dd HH:mm:ss.SSS} %-5p %c\(%F:%L\) ## %m%n</pattern>
+		</encoder>
+	</appender>
+	<logger name="com.meizi" level="info" additivity="false">
+		<appender-ref ref="adminStdoutFile" />
+	</logger>
+	
+	<appender name="adminLogFile" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<file>${LOG_HOME}/audit.log</file>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<fileNamePattern>${LOG_HOME}/audit.log.%d{yyyy-MM-dd}</fileNamePattern>
+		</rollingPolicy>
+		<encoder charset="UTF-8">
+			<pattern>%d{yy-MM-dd HH:mm:ss.SSS}|%msg%n</pattern>
+		</encoder>
+	</appender>
+	<logger name="adminLog" level="info" additivity="false">
+		<appender-ref ref="adminLogFile" />
+	</logger>
+		
+	<root>
+	    <appender-ref ref="console" />
+		<appender-ref ref="adminStdoutFile" />
+		<level value="debug" />
+	</root>
+</configuration>
